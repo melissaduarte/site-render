@@ -1,0 +1,44 @@
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="toolbar">
+        <p>
+            home
+        </p>
+        <p>
+        <a href="{{url_for('biografia')}}">
+            biografia
+        </a>
+        </p>
+        <p>
+        <a href="{{url_for('raspagem')}}">
+            raspagem
+        </a>
+        </p>
+        <p>
+        <a href="{{url_for('bbcresultado')}}">
+            matérias BBC
+        </a>
+        </p>
+        <a href="{{url_for('teste')}}">
+            teste
+        </a>
+        <p>
+        <a href="{{url_for('contato')}}">
+            contato
+        </a>
+        </p>
+    </div>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+      {% block footer %}
+      &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+    </div>
+  </body>
+</html>

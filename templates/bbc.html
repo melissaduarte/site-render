@@ -1,0 +1,67 @@
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspador da BBC</title>
+</head>
+
+<body>
+    <h1>Raspador da BBC</h1>
+    <button onclick="rasparBBC()">Raspar BBC</button>
+    <div id="resultado"></div>
+
+    <script>
+        function gravaArquivo(nome, titulo, texto) {
+            var conteudo = titulo + "<br>";
+
+            for (var i = 0; i < texto.length; i++) {
+                conteudo += texto[i] + "<br>";
+            }
+
+            document.getElementById('resultado').innerHTML += conteudo;
+        }
+
+        function rasparBBC() {
+            var url = "https://www.bbc.com/portuguese/topics/cdr56rdy40rt";
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    var parser = new DOMParser();
+                    var htmlDoc = parser.parseFromString(data, 'text/html');
+                    var links = htmlDoc.querySelectorAll('.focusIndicatorDisplayBlock.bbc-uk8dsi.e1d658bg0');
+
+                    var numeroDeArtigos = 0;
+
+                    links.forEach(link => {
+                        setTimeout(() => {
+                            var linkUrl = link.getAttribute('href');
+                            fetch(linkUrl)
+                                .then(response2 => response2.text())
+                                .then(data2 => {
+                                    var parser2 = new DOMParser();
+                                    var articleDoc = parser2.parseFromString(data2, 'text/html');
+
+                                    var tituloElement = articleDoc.querySelector('.bbc-14gqcmb.e1p3vdyi0');
+                                    if (tituloElement) {
+                                        var titulo = tituloElement.innerText;
+                                        var textoElementos = articleDoc.querySelectorAll('.bbc-19j92fr.ebmt73l0');
+                                        var texto = Array.from(textoElementos).map(element => element.innerText);
+
+                                        numeroDeArtigos++;
+
+                                        var nomeDoArquivo = 'arq' + numeroDeArtigos + '.txt';
+                                        gravaArquivo(nomeDoArquivo, titulo, texto);
+                                    }
+                                })
+                                .catch(error => console.log('Erro ao obter conteúdo do artigo:', error));
+                        }, 2000);
+                    });
+                })
+                .catch(error => console.log('Erro ao obter links da página principal:', error));
+        }
+    </script>
+</body>
+
+</html>

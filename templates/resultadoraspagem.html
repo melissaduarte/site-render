@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Títulos da BBC</title>
+</head>
+<body>
+    <div>
+        <h1>Títulos e Links de Meio Ambiente da BBC:</h1>
+        
+        <ul>
+            {% for noticia in noticias_bbc %}
+                <li>
+                    <a href="{{ noticia.link }}" target="_blank">{{ noticia.titulo }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
